@@ -10,8 +10,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "TEST")
-public class Test {
+@Table(name = "UserDB")
+public class UserDataBase {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -20,7 +20,7 @@ public class Test {
             strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "ID", updatable = false, nullable = false)
     private UUID rowId;
-
-    private String test;
-    private String isActive;
+    private String name;
+    private String surname;
+    private String email;
 }
