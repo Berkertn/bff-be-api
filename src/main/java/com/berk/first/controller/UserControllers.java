@@ -1,16 +1,19 @@
 package com.berk.first.controller;
 
-import com.berk.first.model.UserRequest;
-import com.berk.first.model.UserListResponse;
-import com.berk.first.model.UserResponse;
+import com.berk.first.model.*;
 import com.berk.first.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import static com.berk.first.helper.UserHelper.logError;
+import static com.berk.first.helper.UserHelper.logInfo;
 
 @RestController
 @RequiredArgsConstructor
-public class HelloController {
+public class UserControllers {
 
     final UserService userService;
 
@@ -27,6 +30,25 @@ public class HelloController {
         final UserListResponse userListResponse = userService.getAllUsers();
 
         return ResponseEntity.ok(userListResponse);
+    }
+
+
+    @PostMapping("/user-add")
+    public ResponseEntity<Object> setUserWithData(@Validated @RequestBody UserCreateRequest request, BindingResult result) {
+
+        if (result.hasErrors()) {
+            // Validation errors occurred
+            logInfo(String.format("bad req: %s --- problem: %s",request.toString(),result));
+            return ResponseEntity.badRequest().body(createErrorResponse(result));
+        }
+        try {
+            final UserResponse userResponse = userService.setUserWithData(request);
+            return ResponseEntity.ok(userResponse.getUser());
+        } catch (Exception e) {
+            logError("An error occurred during user creation:", e);
+            // Return a 500 Internal Server Error response
+            return ResponseEntity.status(500).build();
+        }
     }
 
     //1 adet user dönen post method
@@ -54,6 +76,11 @@ public class HelloController {
         return ResponseEntity.ok(userResponse);
     }
 
-
-
+    private ErrorResponse createErrorResponse(BindingResult result) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        result.getFieldErrors().forEach(error -> {
+            errorResponse.getErrorList().add(error.getField() + ": " + error.getDefaultMessage());
+        });
+        return errorResponse;
+    }
 }

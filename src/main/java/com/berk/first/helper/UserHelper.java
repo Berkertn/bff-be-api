@@ -12,7 +12,16 @@ public class UserHelper {
         //burada herhangi bir işlem yapılabilirdi
         //sadece username logladım bunun kullanıldığı yere bakabilirsin
 
-      log.debug(user.getName());
+        log.debug(user.getName());
+    }
 
+    public static void logInfo(final String text) {
+        log.info(text);
+    }
+    public static void logError(final String text) {
+        log.error(text);
+    }
+    public static void logError(final String text, final Exception e) {
+        log.error(text,e);
     }
 }

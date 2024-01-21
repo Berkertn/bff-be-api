@@ -2,16 +2,16 @@ package com.berk.first.service.Impl;
 
 import com.berk.first.helper.UserHelper;
 import com.berk.first.mock.UserData;
-import com.berk.first.model.Test;
-import com.berk.first.model.User;
-import com.berk.first.model.UserListResponse;
-import com.berk.first.model.UserResponse;
+import com.berk.first.model.*;
 import com.berk.first.repo.TestRepo;
 import com.berk.first.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.berk.first.helper.UserHelper.logError;
+import static com.berk.first.helper.UserHelper.logInfo;
 
 @Service
 @RequiredArgsConstructor
@@ -22,20 +22,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserListResponse getAllUsers() {
-        Test testBerk = new Test();
-        testBerk.setTest("berk");
-        testBerk.setIsActive("yes");
-
-        testRepo.save(testBerk);
-       // testRepo.findByTest("berk");
         return userData.getAll();
     }
 
     @Override
     public UserResponse getUserByUserId(String userId) {
         final UserResponse response = new UserResponse();
-        List<Test> isActiveUsers = testRepo.findByIsActive("yes");
-
         final List<User> users = userData.getAll().getUsers();
 
         //burada stream filter için bir örnek bıraktım
@@ -61,6 +53,37 @@ public class UserServiceImpl implements UserService {
         }
          */
         response.setUser(user);
+
+        return response;
+    }
+
+    @Override
+    public UserResponse setUserWithData(UserCreateRequest request) {
+        final UserResponse response = new UserResponse();
+        UserDataBase dbData = new UserDataBase();
+        logInfo(String.format("email: %s, name: %s, surname: %s", request.getEmail(), request.getName(), request.getSurname()));
+        dbData.setEmail(request.getEmail());
+        dbData.setSurname(request.getName());
+        dbData.setName(request.getSurname());
+        UserDataBase userDbCred;
+
+        try {
+            userDbCred = testRepo.save(dbData);
+            if (userDbCred != null) {
+                logInfo("User added in db with cred");
+                User savedUserInfo = new User();
+                savedUserInfo.setUserId(String.valueOf(userDbCred.getRowId()));
+                savedUserInfo.setName(userDbCred.getName());
+                savedUserInfo.setSurname(userDbCred.getSurname());
+                savedUserInfo.setEmail(userDbCred.getEmail());
+                response.setUser(savedUserInfo);
+            } else {
+                logError("User can not added in db");
+            }
+        } catch (Exception e) {
+            logError("An error occurred during user save:", e);
+        }
+
 
         return response;
     }

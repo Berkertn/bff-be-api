@@ -1,5 +1,6 @@
 package com.berk.first.service;
 
+import com.berk.first.model.UserCreateRequest;
 import com.berk.first.model.UserListResponse;
 import com.berk.first.model.UserResponse;
 
@@ -10,4 +11,5 @@ public interface UserService {
     UserListResponse getAllUsers();
 
     UserResponse getUserByUserId(String userId);
+    UserResponse setUserWithData(UserCreateRequest request);
 }

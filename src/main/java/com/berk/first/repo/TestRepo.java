@@ -1,14 +1,14 @@
 package com.berk.first.repo;
 
 
-import com.berk.first.model.Test;
+import com.berk.first.model.UserDataBase;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface TestRepo extends JpaRepository<Test, UUID> {
-    Test findByTest(String test);
+public interface TestRepo extends JpaRepository<UserDataBase, UUID> {
+    UserDataBase findByEmail(String test);
 
-    List<Test> findByIsActive(String isActive);
+    List<UserDataBase> findByName(String isActive);
 }
