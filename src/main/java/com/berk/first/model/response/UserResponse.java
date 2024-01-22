@@ -1,5 +1,6 @@
-package com.berk.first.model;
+package com.berk.first.model.response;
 
+import com.berk.first.model.User;
 import lombok.Data;
 
 import java.util.List;

@@ -3,12 +3,21 @@ package com.berk.first.service.Impl;
 import com.berk.first.helper.UserHelper;
 import com.berk.first.mock.UserData;
 import com.berk.first.model.*;
+import com.berk.first.model.requests.UserCreateRequest;
+import com.berk.first.model.requests.UserDeleteRequest;
+import com.berk.first.model.response.ErrorResponse;
+import com.berk.first.model.response.Response;
+import com.berk.first.model.response.UserListResponse;
+import com.berk.first.model.response.UserResponse;
 import com.berk.first.repo.TestRepo;
 import com.berk.first.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.berk.first.helper.UserHelper.logError;
 import static com.berk.first.helper.UserHelper.logInfo;
@@ -83,8 +92,32 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             logError("An error occurred during user save:", e);
         }
+        return response;
+    }
 
+    @Override
+    public Response deleteUserWithData(UserDeleteRequest request) {
+        UUID userIdFromRequest = UUID.fromString(request.getUserId());
+        final Response response = new Response();
 
+        if (testRepo.existsById(userIdFromRequest)) {
+            List<UserDataBase> foundUsers = testRepo.findByRowId(userIdFromRequest);
+            logInfo(foundUsers.get(0).toString());
+            try {
+                testRepo.deleteById(userIdFromRequest);
+                response.setSuccess(true);
+                response.setData(foundUsers.get(0));
+
+            } catch (Exception e) {
+                response.setSuccess(false);
+                response.setData(userIdFromRequest);
+            }
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.getErrorList().add(String.format("Searching User can not find: %s ", userIdFromRequest));
+            response.setSuccess(false);
+            response.setData(errorResponse);
+        }
         return response;
     }
 }

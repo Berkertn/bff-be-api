@@ -1,10 +1,11 @@
-package com.berk.first.validations;
+package com.berk.first.validations.Impl;
 
 
+import com.berk.first.validations.NoSpecialChars;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class NoSpecialCharsValidator implements ConstraintValidator<NoSpecialChars, String> {
+public class NoSpecialCharsValidatorImpl implements ConstraintValidator<NoSpecialChars, String> {
 
     @Override
     public void initialize(NoSpecialChars constraintAnnotation) {

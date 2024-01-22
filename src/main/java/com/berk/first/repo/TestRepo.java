@@ -11,4 +11,5 @@ public interface TestRepo extends JpaRepository<UserDataBase, UUID> {
     UserDataBase findByEmail(String test);
 
     List<UserDataBase> findByName(String isActive);
+    List<UserDataBase> findByRowId(UUID rowId);
 }
