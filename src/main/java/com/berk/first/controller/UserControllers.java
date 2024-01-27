@@ -25,12 +25,6 @@ public class UserControllers {
 
     final UserService userService;
 
-    @GetMapping("hello")
-    public void hello() {
-        System.out.println("Hello World");
-    }
-
-
     //user listesi dönen get method
     @GetMapping("/users")
     public ResponseEntity<UserListResponse> getAllUsers() {
@@ -39,7 +33,6 @@ public class UserControllers {
 
         return ResponseEntity.ok(userListResponse);
     }
-
 
     @PostMapping("/user/add")
     public ResponseEntity<Object> setUserWithData(@Validated @RequestBody UserCreateRequest request, BindingResult result) {

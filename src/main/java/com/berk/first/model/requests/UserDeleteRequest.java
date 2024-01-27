@@ -4,8 +4,10 @@ import com.berk.first.validations.NoSpecialChars;
 import com.berk.first.validations.UUIDValidator;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class UserDeleteRequest {
     @UUIDValidator
-    private String userId;
+    private UUID userId;
 }

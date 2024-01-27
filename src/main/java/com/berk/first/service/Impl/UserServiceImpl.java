@@ -9,14 +9,12 @@ import com.berk.first.model.response.ErrorResponse;
 import com.berk.first.model.response.Response;
 import com.berk.first.model.response.UserListResponse;
 import com.berk.first.model.response.UserResponse;
-import com.berk.first.repo.TestRepo;
+import com.berk.first.repo.UserRepo;
 import com.berk.first.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.berk.first.helper.UserHelper.logError;
@@ -27,7 +25,7 @@ import static com.berk.first.helper.UserHelper.logInfo;
 public class UserServiceImpl implements UserService {
 
     final UserData userData;
-    final TestRepo testRepo;
+    final UserRepo userRepo;
 
     @Override
     public UserListResponse getAllUsers() {
@@ -77,7 +75,7 @@ public class UserServiceImpl implements UserService {
         UserDataBase userDbCred;
 
         try {
-            userDbCred = testRepo.save(dbData);
+            userDbCred = userRepo.save(dbData);
             if (userDbCred != null) {
                 logInfo("User added in db with cred");
                 User savedUserInfo = new User();
@@ -97,14 +95,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response deleteUserWithData(UserDeleteRequest request) {
-        UUID userIdFromRequest = UUID.fromString(request.getUserId());
+        UUID userIdFromRequest = request.getUserId();
         final Response response = new Response();
 
-        if (testRepo.existsById(userIdFromRequest)) {
-            List<UserDataBase> foundUsers = testRepo.findByRowId(userIdFromRequest);
+        if (userRepo.existsById(userIdFromRequest)) {
+            List<UserDataBase> foundUsers = userRepo.findByRowId(userIdFromRequest);
             logInfo(foundUsers.get(0).toString());
             try {
-                testRepo.deleteById(userIdFromRequest);
+                userRepo.deleteById(userIdFromRequest);
                 response.setSuccess(true);
                 response.setData(foundUsers.get(0));
 

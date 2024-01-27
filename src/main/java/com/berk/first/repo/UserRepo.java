@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface TestRepo extends JpaRepository<UserDataBase, UUID> {
+public interface UserRepo extends JpaRepository<UserDataBase, UUID> {
     UserDataBase findByEmail(String test);
 
     List<UserDataBase> findByName(String isActive);

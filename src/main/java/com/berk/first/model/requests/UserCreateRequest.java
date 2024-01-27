@@ -11,4 +11,5 @@ public class UserCreateRequest {
     @NoSpecialChars
     private String surname;
     private String email;
+    private String password;
 }

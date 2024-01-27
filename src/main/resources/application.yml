@@ -9,6 +9,9 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/berkertan
     username: berkertan
+  security:
+    user:
+      password: berk123
 
   # Hibernate Configuration
   jpa:
