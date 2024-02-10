@@ -1,4 +1,4 @@
-package com.berk.first.model.response;
+package com.berk.first.dao.response;
 
 import com.berk.first.model.User;
 import lombok.Data;

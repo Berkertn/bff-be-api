@@ -1,6 +1,6 @@
 package com.berk.first.mock;
 
-import com.berk.first.model.response.UserListResponse;
+import com.berk.first.dao.response.UserListResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

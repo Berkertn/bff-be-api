@@ -1,17 +1,21 @@
 package com.berk.first.service.Impl;
 
+import com.berk.first.entities.UserDataBase;
 import com.berk.first.helper.UserHelper;
 import com.berk.first.mock.UserData;
 import com.berk.first.model.*;
-import com.berk.first.model.requests.UserCreateRequest;
-import com.berk.first.model.requests.UserDeleteRequest;
-import com.berk.first.model.response.ErrorResponse;
-import com.berk.first.model.response.Response;
-import com.berk.first.model.response.UserListResponse;
-import com.berk.first.model.response.UserResponse;
-import com.berk.first.repo.UserRepo;
+import com.berk.first.dao.requests.UserCreateRequest;
+import com.berk.first.dao.requests.UserDeleteRequest;
+import com.berk.first.dao.response.ErrorResponse;
+import com.berk.first.dao.response.Response;
+import com.berk.first.dao.response.UserListResponse;
+import com.berk.first.dao.response.UserResponse;
+import com.berk.first.repo.UserRepository;
 import com.berk.first.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +29,7 @@ import static com.berk.first.helper.UserHelper.logInfo;
 public class UserServiceImpl implements UserService {
 
     final UserData userData;
-    final UserRepo userRepo;
+    final UserRepository userRepository;
 
     @Override
     public UserListResponse getAllUsers() {
@@ -75,7 +79,7 @@ public class UserServiceImpl implements UserService {
         UserDataBase userDbCred;
 
         try {
-            userDbCred = userRepo.save(dbData);
+            userDbCred = userRepository.save(dbData);
             if (userDbCred != null) {
                 logInfo("User added in db with cred");
                 User savedUserInfo = new User();
@@ -98,11 +102,11 @@ public class UserServiceImpl implements UserService {
         UUID userIdFromRequest = request.getUserId();
         final Response response = new Response();
 
-        if (userRepo.existsById(userIdFromRequest)) {
-            List<UserDataBase> foundUsers = userRepo.findByRowId(userIdFromRequest);
+        if (userRepository.existsById(userIdFromRequest)) {
+            List<UserDataBase> foundUsers = userRepository.findByRowId(userIdFromRequest);
             logInfo(foundUsers.get(0).toString());
             try {
-                userRepo.deleteById(userIdFromRequest);
+                userRepository.deleteById(userIdFromRequest);
                 response.setSuccess(true);
                 response.setData(foundUsers.get(0));
 
@@ -117,5 +121,16 @@ public class UserServiceImpl implements UserService {
             response.setData(errorResponse);
         }
         return response;
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) {
+                return userRepository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
     }
 }

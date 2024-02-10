@@ -1,4 +1,4 @@
-package com.berk.first.model.response;
+package com.berk.first.dao.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

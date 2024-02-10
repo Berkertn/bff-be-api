@@ -1,4 +1,4 @@
-package com.berk.first.model.requests;
+package com.berk.first.dao.requests;
 
 import lombok.Data;
 

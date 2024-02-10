@@ -1,12 +1,12 @@
 package com.berk.first.controller;
 
-import com.berk.first.model.requests.UserCreateRequest;
-import com.berk.first.model.requests.UserDeleteRequest;
-import com.berk.first.model.requests.UserRequest;
-import com.berk.first.model.response.ErrorResponse;
-import com.berk.first.model.response.Response;
-import com.berk.first.model.response.UserListResponse;
-import com.berk.first.model.response.UserResponse;
+import com.berk.first.dao.requests.UserCreateRequest;
+import com.berk.first.dao.requests.UserDeleteRequest;
+import com.berk.first.dao.requests.UserRequest;
+import com.berk.first.dao.response.ErrorResponse;
+import com.berk.first.dao.response.Response;
+import com.berk.first.dao.response.UserListResponse;
+import com.berk.first.dao.response.UserResponse;
 import com.berk.first.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
